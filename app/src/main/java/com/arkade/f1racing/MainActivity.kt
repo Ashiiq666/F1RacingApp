@@ -11,8 +11,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.core.view.WindowCompat
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.arkade.f1racing.data.network.ApiService
@@ -32,6 +36,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        
+        // Set status bar to transparent for edge-to-edge, with white icons
+        window.statusBarColor = android.graphics.Color.TRANSPARENT
+        WindowCompat.getInsetsController(window, window.decorView).apply {
+            isAppearanceLightStatusBars = false // false = white icons
+        }
 
         // Initialize dependencies
         apiService = ApiService()
@@ -40,6 +50,17 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             F1RacingAppTheme {
+                val systemUiController = rememberSystemUiController()
+                
+                // Set status bar to transparent for edge-to-edge, with white icons
+                // The black background will show through
+                SideEffect {
+                    systemUiController.setStatusBarColor(
+                        color = Color.Transparent,
+                        darkIcons = false // false = white icons
+                    )
+                }
+
                 val navController = rememberNavController()
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route ?: "home"
@@ -74,8 +95,8 @@ class MainActivity : ComponentActivity() {
                     Surface(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(paddingValues),
-                        color = MaterialTheme.colorScheme.background
+                            .padding(bottom = paddingValues.calculateBottomPadding()), // Only bottom padding for bottom nav
+                        color = Color.Black // Use black instead of theme background
                     ) {
                         Navigation(
                             navController = navController,

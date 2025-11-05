@@ -27,6 +27,7 @@ constraintlayoutCompose = "1.1.1"
 accompanistNavigationAnimation = "0.36.0"
 accompanistSystemuicontroller = "0.36.0"
 accompanistPermissions = "0.37.3"
+accompanistPager = "0.36.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -61,6 +62,8 @@ androidx-navigation-compose = { module = "androidx.navigation:navigation-compose
 accompanist-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanistNavigationAnimation" }
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
+accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanistPager" }
+accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanistPager" }
 
 
 # Ktor
