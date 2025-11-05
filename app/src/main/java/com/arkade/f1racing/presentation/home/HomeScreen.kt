@@ -22,9 +22,7 @@ fun HomeScreen(
     onRaceCardClick: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
-    
-    // Set status bar to transparent for edge-to-edge, with white icons
-    // The black background will show through
+
     SideEffect {
         systemUiController.setStatusBarColor(
             color = Color.Transparent,
@@ -36,18 +34,20 @@ fun HomeScreen(
         )
     }
     
+    val scrollState = rememberScrollState()
+    
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black)
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(scrollState)
     ) {
-        // Slider at the top - will extend behind status bar, full width
+
         HomeSlider(
             modifier = Modifier.fillMaxWidth()
         )
 
-        // Rest of the home content can go here
+
         Spacer(modifier = Modifier.height(16.dp))
         Box(
             modifier = Modifier
@@ -62,5 +62,7 @@ fun HomeScreen(
                 fontWeight = FontWeight.Bold
             )
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }
