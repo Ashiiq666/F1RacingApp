@@ -1,4 +1,4 @@
-package com.arkade.f1racing.presentation.home
+package com.arkade.f1racing.presentation.calendar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -11,10 +11,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun HomeScreen(
-    viewModel: HomeViewModel,
-    onRaceCardClick: () -> Unit
-) {
+fun EventScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -22,10 +19,11 @@ fun HomeScreen(
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "Home",
+            text = "Event Screen",
             color = Color.White,
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold
         )
     }
 }
+

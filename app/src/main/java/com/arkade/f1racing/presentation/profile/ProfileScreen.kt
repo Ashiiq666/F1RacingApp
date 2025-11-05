@@ -1,8 +1,8 @@
-package com.arkade.f1racing.presentation.home
+package com.arkade.f1racing.presentation.profile
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -10,10 +10,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(
-    viewModel: HomeViewModel,
-    onRaceCardClick: () -> Unit
+fun ProfileScreen(
+
 ) {
     Box(
         modifier = Modifier
@@ -22,7 +22,7 @@ fun HomeScreen(
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "Home",
+            text = "Profile Screen",
             color = Color.White,
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold
