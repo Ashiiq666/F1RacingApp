@@ -42,11 +42,9 @@ fun HomeScreen(
             .background(Color.Black)
             .verticalScroll(rememberScrollState())
     ) {
-        // Slider at the top - will extend behind status bar
+        // Slider at the top - will extend behind status bar, full width
         HomeSlider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp)
+            modifier = Modifier.fillMaxWidth()
         )
 
         // Rest of the home content can go here

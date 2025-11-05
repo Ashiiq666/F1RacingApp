@@ -65,9 +65,8 @@ fun HomeSlider(
 
     Card(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 14.dp),
-        shape = RoundedCornerShape(24.dp),
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(0.dp), // No rounded corners for full width
         colors = CardDefaults.cardColors(containerColor = Color.Black)
     ) {
         Box {
