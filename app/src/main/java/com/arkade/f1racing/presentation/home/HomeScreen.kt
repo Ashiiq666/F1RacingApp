@@ -3,6 +3,8 @@ package com.arkade.f1racing.presentation.home
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -14,9 +16,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.draw.clip
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,11 +38,13 @@ import com.arkade.f1racing.ui.theme.montserratFont
 import com.arkade.f1racing.ui.theme.space_gro_teskFont
 import androidx.compose.ui.text.withStyle
 import com.arkade.f1racing.BuildConfig
+import com.arkade.f1racing.presentation.home.components.HomeSliderItem
 import com.arkade.f1racing.ui.theme.boldTextStyle
 import com.arkade.f1racing.utils.Constants.GUIDE_URL
 import com.arkade.f1racing.utils.Constants.INSTRAGRAM_URL
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UseKtx")
 @Composable
 fun HomeScreen(
@@ -45,6 +52,7 @@ fun HomeScreen(
     onRaceCardClick: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
+    val uiState by viewModel.uiState.collectAsState()
 
     SideEffect {
         systemUiController.setStatusBarColor(
@@ -59,6 +67,57 @@ fun HomeScreen(
 
     val scrollState = rememberScrollState()
 
+    if (uiState.isLoading) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(color = Color(0xFFFF5A08))
+        }
+        return
+    }
+
+
+    if (uiState.error != null) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Text(
+                    text = "Error loading data",
+                    color = Color.White,
+                    fontSize = 18.sp,
+                    fontFamily = montserratFont
+                )
+                Text(
+                    text = uiState.error ?: "Unknown error",
+                    color = Color.Gray,
+                    fontSize = 14.sp,
+                    fontFamily = montserratFont
+                )
+                Text(
+                    text = "Retry",
+                    color = Color(0xFFFF5A08),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = montserratFont,
+                    modifier = Modifier.clickable {
+                        viewModel.loadRaceData()
+                    }
+                )
+            }
+        }
+        return
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -66,9 +125,36 @@ fun HomeScreen(
             .verticalScroll(scrollState)
     ) {
 
+        val sliderItems = buildList {
+
+            uiState.topDriver?.let { driver ->
+                add(
+                    HomeSliderItem.DriverInfo(
+                        position = driver.position.toString().padStart(2, '0'),
+                        wins = driver.wins.toString().padStart(2, '0'),
+                        points = driver.points.toString(),
+                        driverName = driver.firstName,
+                        teamName = driver.teamName,
+                        podiums = driver.podiums,
+                        poles = driver.poles
+                    )
+                )
+            }
+
+            // Add banner
+            add(
+                HomeSliderItem.Banner(
+                    bannerRes = R.drawable.banner
+                )
+            )
+        }
+
+
         HomeSlider(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            sliderItems = sliderItems
         )
+
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -78,12 +164,11 @@ fun HomeScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 14.dp)
         ) {
-            // Top row: Card 1 (left) and Card 2 (right)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                // Card 1: Dark green background with date/time
+
                 Card(
                     modifier = Modifier
                         .weight(1f)
@@ -322,7 +407,6 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(12.dp))
             val context = LocalContext.current
 
-            // Bottom: Card 4 - Image card
             Card(
                 modifier = Modifier
                     .fillMaxWidth()

@@ -95,6 +95,7 @@ dependencies {
     //noinspection NewerVersionAvailable
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.client.logging)
+    implementation(libs.ktor.client.cio)
 
     //json
     implementation(libs.kotlinx.serialization.json)

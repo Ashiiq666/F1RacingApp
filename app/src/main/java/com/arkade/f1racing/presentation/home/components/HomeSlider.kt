@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -46,19 +47,21 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun HomeSlider(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    sliderItems: List<HomeSliderItem> = emptyList()
 ) {
-    val sliderItems = listOf(
-        HomeSliderItem.DriverInfo(
-            position = "01",
-            wins = "09",
-            points = "429",
-            driverName = "Lando"
-        ),
-        HomeSliderItem.Banner(
-            bannerRes = R.drawable.banner
-        )
-    )
+    if (sliderItems.isEmpty()) {
+        Box(
+            modifier = modifier
+                .fillMaxWidth()
+                .height(480.dp)
+                .background(Color.Black),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(color = Color(0xFFFF5A08))
+        }
+        return
+    }
 
     val pagerState = rememberPagerState()
 

@@ -25,6 +25,7 @@ import com.arkade.f1racing.presentation.home.HomeViewModel
 import com.arkade.f1racing.presentation.navigations.BottomNavigationBar
 import com.arkade.f1racing.presentation.navigations.Navigation
 import com.arkade.f1racing.ui.theme.F1RacingAppTheme
+import kotlinx.coroutines.runBlocking
 
 class MainActivity : ComponentActivity() {
 
@@ -36,12 +37,17 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        
+        apiService = ApiService()
+        repository = Repository(apiService)
+        homeViewModel = HomeViewModel(repository)
+
+        main()
         // Set status bar to transparent for edge-to-edge, with white icons
         window.statusBarColor = android.graphics.Color.TRANSPARENT
         WindowCompat.getInsetsController(window, window.decorView).apply {
             isAppearanceLightStatusBars = false // false = white icons
         }
+
 
         // Initialize dependencies
         apiService = ApiService()
@@ -106,6 +112,40 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+
+    fun main() = runBlocking {
+        val repository = Repository(apiService)
+
+        // Get the leading driver (position = 1)
+        repository.getLeadingDriver().fold(
+            onSuccess = { driver ->
+                driver?.let {
+                    println("Leading Driver: ${it.firstName} ${it.lastName}")
+                    println("Team: ${it.teamName}")
+                    println("Points: ${it.points}")
+                    println("Wins: ${it.wins}")
+                } ?: println("No leading driver found")
+            },
+            onFailure = { error ->
+                println("Error: ${error.message}")
+            }
+        )
+
+        // Get all drivers
+        repository.getAllDrivers().fold(
+            onSuccess = { drivers ->
+                drivers.forEach { driver ->
+                    println("${driver.position}. ${driver.firstName} ${driver.lastName} - ${driver.points} pts")
+                }
+            },
+            onFailure = { error ->
+                println("Error: ${error.message}")
+            }
+        )
+
+        repository.cleanup()
     }
 
     override fun onDestroy() {

@@ -27,7 +27,6 @@ data class HomeUiState(
     val error: String? = null
 )
 
-
 @RequiresApi(Build.VERSION_CODES.O)
 class HomeViewModel(private val repository: Repository) : ViewModel() {
 
@@ -45,25 +44,26 @@ class HomeViewModel(private val repository: Repository) : ViewModel() {
 
             try {
                 // Fetch top driver
-                val driverResult = repository.getTopDriver()
+                val driverResult = repository.getLeadingDriver()
                 val driver = driverResult.getOrNull()
 
                 // Fetch upcoming race
-                val raceResult = repository.getUpcomingRace()
-                val race = raceResult.getOrNull()
+//                val raceResult = repository.get()
+//                val race = raceResult.getOrNull()
 
                 // Find next session
-                val (nextSession, localTime) = race?.let { findNextSession(it) } ?: (null to null)
-
+//                val (nextSession, localTime) = race?.let { findNextSession(it) } ?: (null to null)
+//
                 _uiState.update {
                     it.copy(
                         isLoading = false,
                         topDriver = driver,
-                        upcomingRace = race,
-                        nextSession = nextSession,
-                        nextSessionLocalTime = localTime
+                        // upcomingRace = race,
+                        // nextSession = nextSession,
+                        // nextSessionLocalTime = localTime
                     )
                 }
+//                }
             } catch (e: Exception) {
                 _uiState.update {
                     it.copy(
