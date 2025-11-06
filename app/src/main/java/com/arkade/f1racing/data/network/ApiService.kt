@@ -3,6 +3,7 @@ package com.arkade.f1racing.data.network
 
 import com.arkade.f1racing.data.model.DriverResponse
 import com.arkade.f1racing.data.model.RaceResponse
+import com.arkade.f1racing.utils.Constants.BASE_URL
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.android.*
@@ -29,7 +30,7 @@ class ApiService {
 
     suspend fun getDrivers(): Result<DriverResponse> {
         return try {
-            val response = client.get("https://mocki.io/v1/e8616da8-220c-4aab-a670-ab2d43224ecb")
+            val response = client.get(BASE_URL)
             Result.success(response.body())
         } catch (e: Exception) {
             Result.failure(e)
@@ -38,7 +39,7 @@ class ApiService {
 
     suspend fun getRaces(): Result<RaceResponse> {
         return try {
-            val response = client.get("https://mocki.io/v1/9086a3f1-f02b-4d24-8dd3-b63582f45e67")
+            val response = client.get(BASE_URL)
             Result.success(response.body())
         } catch (e: Exception) {
             Result.failure(e)
