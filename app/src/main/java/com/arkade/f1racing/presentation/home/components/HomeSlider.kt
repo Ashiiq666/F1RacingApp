@@ -1,11 +1,23 @@
 package com.arkade.f1racing.presentation.home.components
 
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
@@ -14,7 +26,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
@@ -22,15 +33,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.Image
 import com.arkade.f1racing.R
 import com.arkade.f1racing.ui.theme.boldTextStyle
 import com.arkade.f1racing.ui.theme.montserratFont
 import com.arkade.f1racing.ui.theme.space_gro_teskFont
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.delay
 
 @Composable
@@ -38,26 +49,23 @@ fun HomeSlider(
     modifier: Modifier = Modifier
 ) {
     val sliderItems = listOf(
-        HomeSliderItem(
+        HomeSliderItem.DriverInfo(
             position = "01",
             wins = "09",
             points = "429",
             driverName = "Lando"
         ),
-        HomeSliderItem(
-            position = "02",
-            wins = "08",
-            points = "398",
-            driverName = "Max"
+        HomeSliderItem.Banner(
+            bannerRes = R.drawable.banner
         )
     )
 
     val pagerState = rememberPagerState()
 
-    // Auto sliding effect
+
     LaunchedEffect(pagerState) {
         while (true) {
-            delay(3000) // 3 seconds delay
+            delay(3000)
             val nextPage = (pagerState.currentPage + 1) % sliderItems.size
             pagerState.animateScrollToPage(nextPage)
         }
@@ -66,7 +74,7 @@ fun HomeSlider(
     Card(
         modifier = modifier
             .fillMaxWidth(),
-        shape = RoundedCornerShape(0.dp), // No rounded corners for full width
+        shape = RoundedCornerShape(0.dp),
         colors = CardDefaults.cardColors(containerColor = Color.Black)
     ) {
         Box {
@@ -76,6 +84,38 @@ fun HomeSlider(
                 modifier = Modifier.fillMaxWidth()
             ) { page ->
                 HomeSliderCard(item = sliderItems[page])
+            }
+
+
+            Box(
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(start = 24.dp, top = 50.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(30.dp))
+                        .background(Color(0xFFFFFFFF).copy(alpha = 0.1f))
+                        .padding(horizontal = 12.dp, vertical = 8.dp)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(R.drawable.diamond),
+                            contentDescription = "Diamond icon",
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Text(
+                            text = "Get Pro",
+                            color = Color.White,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            fontFamily = montserratFont
+                        )
+                    }
+                }
             }
 
             RectPagerIndicator(
@@ -123,6 +163,20 @@ fun RectPagerIndicator(
 private fun HomeSliderCard(
     item: HomeSliderItem
 ) {
+    when (item) {
+        is HomeSliderItem.DriverInfo -> {
+            DriverInfoCard(item)
+        }
+        is HomeSliderItem.Banner -> {
+            BannerCard(item)
+        }
+    }
+}
+
+@Composable
+private fun DriverInfoCard(
+    item: HomeSliderItem.DriverInfo
+) {
     val orangeColor = Color(0xFFFF5A08)
     val whiteColor = Color(0xFFFFFFFF)
 
@@ -132,40 +186,14 @@ private fun HomeSliderCard(
             .height(480.dp)
             .background(orangeColor)
     ) {
-        // Get Pro box and Lando text - aligned TopStart
+
         Column(
             modifier = Modifier
                 .align(Alignment.TopStart)
                 .padding(start = 24.dp, top = 50.dp)
         ) {
-            // Get Pro box
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(30.dp))
-                    .background(Color(0xFFFFFFFF).copy(alpha = 0.1f))
-                    .padding(horizontal = 12.dp, vertical = 8.dp)
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp)
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.diamond),
-                        contentDescription = "Diamond icon",
-                        modifier = Modifier.size(18.dp)
-                    )
-                    Text(
-                        text = "Get Pro",
-                        color = Color.White,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        fontFamily = montserratFont
-                    )
-                }
-            }
-
             Text(
-                text = "Lando",
+                text = item.driverName,
                 style = boldTextStyle.copy(
                     color = Color(0xFFFFF2AF).copy(alpha = 0.3f),
                     fontSize = 164.sp,
@@ -178,7 +206,7 @@ private fun HomeSliderCard(
             )
         }
 
-        // Driver image (drive.png) on the right, aligned to bottom
+
         Image(
             painter = painterResource(R.drawable.driver),
             contentDescription = "Driver with helmet",
@@ -188,8 +216,6 @@ private fun HomeSliderCard(
             contentScale = ContentScale.Fit
         )
 
-        // Semi-transparent black overlay with blur effect - gradient from bottom to top
-        // This layer sits on top of background/driver but below statistics
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -209,22 +235,21 @@ private fun HomeSliderCard(
                 .blur(radius = 8.dp)
         )
 
-        // Statistics section on the left - positioned near bottom indicator with 42dp spacing
-        // This section is elevated above the overlay layer
+
         Column(
             modifier = Modifier
                 .align(Alignment.BottomStart)
                 .padding(
                     start = 27.dp,
                     bottom = 66.dp
-                ) // 42dp above indicator + 24dp indicator bottom padding
+                )
         ) {
-            // Position and Wins in a single row
+
             Row(
                 horizontalArrangement = Arrangement.spacedBy(24.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Position
+
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
@@ -283,12 +308,10 @@ private fun HomeSliderCard(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Points number with gradient (big letter size 72dp) and PTS box aligned horizontally
             Row(
                 verticalAlignment = Alignment.Bottom,
                 horizontalArrangement = Arrangement.spacedBy(5.dp)
             ) {
-                // Points number
                 Text(
                     text = item.points,
                     style = TextStyle(
@@ -297,8 +320,8 @@ private fun HomeSliderCard(
                         fontWeight = FontWeight.Light,
                         brush = Brush.verticalGradient(
                             colors = listOf(
-                                whiteColor, // Bottom - #FFFFFF
-                                orangeColor // Top - #FF5A08
+                                whiteColor,
+                                orangeColor
                             )
                         )
                     )
@@ -326,7 +349,53 @@ private fun HomeSliderCard(
             }
         }
     }
+}
 
+@Composable
+private fun BannerCard(
+    item: HomeSliderItem.Banner
+) {
+    val followButtonColor = Color(0xFF86FF0E)
+    
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(480.dp)
+            .background(Color.Black)
+    ) {
+        Image(
+            painter = painterResource(item.bannerRes),
+            contentDescription = "Banner",
+            modifier = Modifier
+                .width(271.dp)
+                .height(214.dp)
+                .align(Alignment.Center)
+                .padding(bottom = 30.dp),
+            contentScale = ContentScale.Crop
+        )
+        
+
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 60.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(55.dp))
+                    .background(followButtonColor)
+                    .padding(horizontal = 48.dp, vertical = 16.dp)
+            ) {
+                Text(
+                    text = "Follow Us",
+                    color = Color.Black,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = montserratFont
+                )
+            }
+        }
+    }
 }
 
 
