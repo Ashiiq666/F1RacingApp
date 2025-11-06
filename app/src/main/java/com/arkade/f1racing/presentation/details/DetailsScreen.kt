@@ -5,6 +5,9 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -112,11 +115,14 @@ fun DetailsScreen(
             contentScale = ContentScale.Crop
         )
         
-        // Content overlay
+        // Content overlay - Scrollable layout
+        val scrollState = rememberScrollState()
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 20.dp, start = 24.dp, end = 24.dp)
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .verticalScroll(scrollState)
+                .padding(top = 20.dp, start = 24.dp, end = 24.dp, bottom = 24.dp)
         ) {
             // "Upcoming race" header
             Text(
@@ -127,7 +133,7 @@ fun DetailsScreen(
                 fontFamily = montserratFont,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 35.dp),
+                    .padding(top = 40.dp),
                 textAlign = androidx.compose.ui.text.style.TextAlign.Center
             )
             
@@ -153,7 +159,7 @@ fun DetailsScreen(
                     
                     // Race name
                     Text(
-                        text = "race.raceName",
+                        text = race.raceName,
                         color = whiteColor,
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Black,
@@ -162,7 +168,7 @@ fun DetailsScreen(
                     
                     // Locality (green)
                     Text(
-                        text = "race.locality",
+                        text = race.locality,
                         color = greenAccent,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.SemiBold,
@@ -172,7 +178,7 @@ fun DetailsScreen(
                     // Date range
                     if (dateRange.isNotEmpty()) {
                         Text(
-                            text = "dateRange",
+                            text = dateRange,
                             color = whiteColor,
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Medium,
@@ -273,6 +279,70 @@ fun DetailsScreen(
                         )
                     }
                 }
+            }
+            
+            Spacer(modifier = Modifier.height(48.dp))
+            
+            // Circuit Information Section
+            Column(
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                // Circuit Name Header
+                Text(
+                    text = "${race.circuitName} Circuit",
+                    color = whiteColor,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = montserratFont
+                )
+                
+                // Circuit Description
+                Text(
+                    text = "${race.circuitName} is located in ${race.locality}, ${race.country} and it was designed by German architect Hermann Tilke. It was built on the site of a former camel farm, in ${race.locality}. It measures 5.412 km, has 15 corners and 3 DRS Zones. The Grand Prix have 57 laps. This circuit has 6 alternative layouts.",
+                    color = whiteColor,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Normal,
+                    fontFamily = montserratFont,
+                    lineHeight = 20.sp
+                )
+                
+                Spacer(modifier = Modifier.height(8.dp))
+                
+                // Circuit Facts Section Header
+                Text(
+                    text = "Circuit Facts",
+                    color = whiteColor,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = montserratFont
+                )
+                
+                // First Fact
+                Text(
+                    text = "His brother Arthur Leclerc is currently set to race for DAMS in the 2023 F2 Championship",
+                    color = whiteColor,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Normal,
+                    fontFamily = montserratFont,
+                    lineHeight = 20.sp
+                )
+                
+                // Separator Line
+                Divider(
+                    color = Color(0xFF333333),
+                    thickness = 1.dp,
+                    modifier = Modifier.padding(vertical = 12.dp)
+                )
+                
+                // Second Fact
+                Text(
+                    text = "He's not related to Édouard Leclerc, the founder of a French supermarket chain",
+                    color = whiteColor,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Normal,
+                    fontFamily = montserratFont,
+                    lineHeight = 20.sp
+                )
             }
         }
     }
