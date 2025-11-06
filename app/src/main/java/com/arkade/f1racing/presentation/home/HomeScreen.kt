@@ -1,19 +1,33 @@
 package com.arkade.f1racing.presentation.home
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.draw.clip
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.arkade.f1racing.R
 import com.arkade.f1racing.presentation.home.components.HomeSlider
+import com.arkade.f1racing.ui.theme.montserratFont
+import com.arkade.f1racing.ui.theme.space_gro_teskFont
+import androidx.compose.ui.text.withStyle
+import com.arkade.f1racing.ui.theme.boldTextStyle
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
@@ -33,9 +47,9 @@ fun HomeScreen(
             darkIcons = false
         )
     }
-    
+
     val scrollState = rememberScrollState()
-    
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -47,20 +61,276 @@ fun HomeScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-
         Spacer(modifier = Modifier.height(16.dp))
-        Box(
+
+        // Cards Grid Layout
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            contentAlignment = Alignment.Center
+                .padding(horizontal = 14.dp)
         ) {
-            Text(
-                text = "Home",
-                color = Color.White,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold
-            )
+            // Top row: Card 1 (left) and Card 2 (right)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                // Card 1: Dark green background with date/time
+                Card(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(132.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFF044331))
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 8.dp, vertical = 1.dp)
+                    ) {
+                        Column(modifier = Modifier.padding(10.dp)) {
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalAlignment = Alignment.Start,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                Text(
+                                    text = "FP1",
+                                    color = Color.White,
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    fontFamily = space_gro_teskFont
+                                )
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                ) {
+                                    Image(
+                                        painter = painterResource(R.drawable.calendar_check),
+                                        contentDescription = "Calendar icon",
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                    Text(
+                                        text = "04 Friday",
+                                        color = Color.White,
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        fontFamily = space_gro_teskFont
+                                    )
+                                }
+
+                                Spacer(modifier = Modifier.height(6.dp))
+
+                                Text(
+                                    text = buildAnnotatedString {
+                                        withStyle(
+                                            style = boldTextStyle.copy(
+                                                fontSize = 36.sp,
+                                                fontWeight = FontWeight.Bold,
+                                                fontFamily = space_gro_teskFont,
+                                                color = Color(0xFF02BB81)
+                                            ).toSpanStyle()
+                                        ) {
+                                            append("8.00")
+                                        }
+                                        withStyle(
+                                            style = boldTextStyle.copy(
+                                                fontSize = 20.sp,
+                                                fontFamily = space_gro_teskFont,
+                                                color = Color.White,
+                                                fontWeight = FontWeight.Bold
+                                            ).toSpanStyle()
+                                        ) {
+                                            append("AM")
+                                        }
+                                    },
+                                )
+
+                            }
+
+
+
+
+                            Row(
+                                verticalAlignment = Alignment.Bottom,
+                                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                            ) {
+
+                            }
+                        }
+                    }
+                }
+
+                // Card 2: Black background with red accent on left and border
+                Card(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(60.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.Black)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .border(1.dp, Color(0xFF212121), RoundedCornerShape(16.dp))
+                    ) {
+                        // Red accent section on the left
+                        Box(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .fillMaxWidth(0.5f) // Adjust this fraction for the red part's width
+                                .background(
+                                    Color(0xFFF51A1E),
+                                    RoundedCornerShape(topStart = 16.dp, bottomStart = 16.dp)
+                                )
+                        )
+                        // Content Row
+                        Row(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 12.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.ic_route),
+                                contentDescription = "Infinity icon",
+                                modifier = Modifier.size(28.dp)
+                            )
+                            Text(
+                                text = buildAnnotatedString {
+                                    withStyle(
+                                        style = boldTextStyle.copy(
+                                            fontSize = 28.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            fontFamily = space_gro_teskFont,
+                                            color = Color.White
+                                        ).toSpanStyle()
+                                    ) {
+                                        append("7015.3")
+                                    }
+                                    withStyle(
+                                        style = boldTextStyle.copy(
+                                            fontSize = 14.sp,
+                                            fontFamily = space_gro_teskFont,
+                                            color = Color.White
+                                        ).toSpanStyle()
+                                    ) {
+                                        append("km")
+                                    }
+                                },
+                            )
+                        }
+                    }
+                }
+            }
+
+
+            // Middle row: Card 3 (right side)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                // Card 3: Blue background with Formula 1 Education
+                Card(
+                    modifier = Modifier
+                        .width(180.dp)
+                        .height(60.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFF3020FD))
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxSize(),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            // Two circle icons
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(24.dp)
+                                        .background(Color.White, RoundedCornerShape(50))
+                                )
+                                Box(
+                                    modifier = Modifier
+                                        .size(24.dp)
+                                        .border(2.dp, Color.White, RoundedCornerShape(50))
+                                )
+                            }
+
+                            Column {
+                                Text(
+                                    text = "Formula 1",
+                                    color = Color.White,
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    fontFamily = montserratFont
+                                )
+                                Text(
+                                    text = "Education",
+                                    color = Color.White,
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    fontFamily = montserratFont
+                                )
+                            }
+                        }
+
+                        // Arrow icon in top-right, enclosed in a tiny white circle
+                        Box(
+                            modifier = Modifier
+                                .align(Alignment.TopEnd)
+                                .size(24.dp)
+                                .background(Color.White, RoundedCornerShape(50)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.ic_route),
+                                contentDescription = "Arrow icon",
+                                modifier = Modifier.size(12.dp)
+                            )
+                        }
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Bottom: Card 4 - Image card
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.Black)
+            ) {
+                Box {
+                    Image(
+                        painter = painterResource(R.drawable.instagram),
+                        contentDescription = "Instagram image",
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+
+                    // Instagram icon in bottom-right corner
+                    Image(
+                        painter = painterResource(R.drawable.ic_instagram),
+                        contentDescription = "Instagram icon",
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(16.dp)
+                            .size(24.dp)
+                    )
+                }
+            }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
