@@ -1,13 +1,23 @@
 package com.arkade.f1racing.presentation.navigations
 
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.draw.clip
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -79,22 +89,40 @@ fun BottomNavigationBar(
         items.forEachIndexed { index, item ->
             val isSelected = selectedRoute == item.route
 
-            val itemModifier = when (index) {
-                0 -> Modifier.padding(start = 16.dp) // Start icon
-                items.lastIndex -> Modifier.padding(end = 16.dp) // End icon
-                else -> Modifier
-            }
+
+
+            // Animated width for the pill selector (minimum 70.dp when selected)
+            val selectorWidth by animateDpAsState(
+                targetValue = if (isSelected) 80.dp else 0.dp,
+                label = "selector_width"
+            )
 
             NavigationBarItem(
-                modifier = itemModifier,
+                modifier= Modifier.padding(start = 5.dp, end = 5.dp),
                 icon = {
-                    Icon(
-                        painter = painterResource(
-                            id = if (isSelected) item.selectedIconRes else item.unselectedIconRes
-                        ),
-                        contentDescription = item.label,
-                        modifier = Modifier.size(28.dp)
-                    )
+                    Box(
+                        modifier = Modifier
+                            .height(48.dp)
+                            .then(
+                                if (isSelected && selectorWidth > 0.dp) {
+                                    Modifier
+                                        .width(selectorWidth)
+                                        .clip(RoundedCornerShape(300.dp))
+                                        .background(Color(0xFF212121).copy(alpha = 0.7f))
+                                } else {
+                                    Modifier.widthIn(min = 28.dp) // Ensure icon is always visible
+                                }
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            painter = painterResource(
+                                id = if (isSelected) item.selectedIconRes else item.unselectedIconRes
+                            ),
+                            contentDescription = item.label,
+                            modifier = Modifier.size(28.dp)
+                        )
+                    }
                 },
                 selected = isSelected,
                 onClick = { onItemSelected(item.route) },
