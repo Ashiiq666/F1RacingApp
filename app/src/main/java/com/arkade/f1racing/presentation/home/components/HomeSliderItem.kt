@@ -4,6 +4,6 @@ data class HomeSliderItem(
     val position: String,
     val wins: String,
     val points: String,
-    val driverName: String = "Lando"
+    val driverName: String
 )
 
