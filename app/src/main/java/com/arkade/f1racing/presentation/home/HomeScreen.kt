@@ -98,7 +98,8 @@ fun HomeScreen(
 
                         Column(modifier = Modifier.padding(horizontal = 5.dp)) {
                             Column(
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier
+                                    .fillMaxWidth()
                                     .padding(top = 20.dp),
                                 horizontalAlignment = Alignment.Start,
                                 verticalArrangement = Arrangement.Center
@@ -247,66 +248,59 @@ fun HomeScreen(
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(16.dp)
+                                .padding(  8.dp)
                         ) {
                             Box(modifier = Modifier.fillMaxSize()) {
                                 Row(
                                     modifier = Modifier.fillMaxSize(),
-                                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                                    horizontalArrangement = Arrangement.spacedBy(2.dp),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     // Two circle icons
-                                    Column(
-                                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                                    ) {
-                                        Box(
-                                            modifier = Modifier
-                                                .size(24.dp)
-                                                .background(Color.White, RoundedCornerShape(50))
-                                        )
-                                        Box(
-                                            modifier = Modifier
-                                                .size(24.dp)
-                                                .border(2.dp, Color.White, RoundedCornerShape(50))
-                                        )
-                                    }
+                                    Image(
+                                        painter = painterResource(R.drawable.ic_formula),
+                                        contentDescription = "Calendar icon",
+                                        modifier = Modifier.size(32.dp)
+                                    )
 
-                                    Column {
+                                    Spacer(modifier = Modifier.width(12.dp))
+
+                                    Column(
+                                        verticalArrangement = Arrangement.Center
+                                    ) {
                                         Text(
                                             text = "Formula 1",
-                                            color = Color.White,
-                                            fontSize = 12.sp,
-                                            fontWeight = FontWeight.Bold,
-                                            fontFamily = montserratFont
+                                            style = boldTextStyle.copy(
+                                                fontSize = 12.sp, // Adjusted size
+                                                fontWeight = FontWeight.Bold,
+                                                fontFamily = montserratFont,
+                                                color = Color.White
+                                            )
                                         )
                                         Text(
                                             text = "Education",
-                                            color = Color.White,
-                                            fontSize = 16.sp,
-                                            fontWeight = FontWeight.Bold,
-                                            fontFamily = montserratFont
+                                            style = boldTextStyle.copy(
+                                                fontSize = 16.sp,
+                                                fontFamily = montserratFont,
+                                                color = Color.White
+                                            )
                                         )
                                     }
                                 }
 
-                                // Arrow icon in top-right, enclosed in a tiny white circle
-                                Box(
+                                Image(
+                                    painter = painterResource(R.drawable.ic_redirect),
+                                    contentDescription = "Arrow icon",
                                     modifier = Modifier
                                         .align(Alignment.TopEnd)
-                                        .size(24.dp)
-                                        .background(Color.White, RoundedCornerShape(50)),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Image(
-                                        painter = painterResource(R.drawable.ic_route),
-                                        contentDescription = "Arrow icon",
-                                        modifier = Modifier.size(12.dp)
+                                        .size(16.dp),
+
                                     )
-                                }
+
                             }
                         }
                     }
-            }
+                }
             }
 
 
