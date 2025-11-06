@@ -17,13 +17,14 @@ import com.arkade.f1racing.presentation.trophy.ResultScreen
 import com.arkade.f1racing.presentation.web.WebScreen
 import com.arkade.f1racing.presentation.profile.ProfileScreen
 import androidx.compose.runtime.collectAsState
-import androidx.navigation.Navigation
+import com.arkade.f1racing.presentation.details.DetailsViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Navigation(
     navController: NavHostController,
-    homeViewModel: HomeViewModel
+    homeViewModel: HomeViewModel,
+    detailsViewModel: DetailsViewModel
 ) {
     NavHost(
         navController = navController,
@@ -105,20 +106,11 @@ fun Navigation(
             val race = homeViewModel.uiState.collectAsState().value.upcomingRace
             // Show DetailsScreen even if race is null (for now, until race data is loaded)
             DetailsScreen(
-                race = race ?: com.arkade.f1racing.data.model.Race(
-                    round = "",
-                    raceName = "",
-                    circuitId = "",
-                    circuitName = "",
-                    locality = "",
-                    country = "",
-                    raceStartTime = "",
-                    raceEndTime = "",
-                    sessions = emptyList()
-                ),
+                race = race!!,
                 onBackClick = {
                     navController.popBackStack()
-                }
+                },
+                detailsViewModel
             )
         }
     }

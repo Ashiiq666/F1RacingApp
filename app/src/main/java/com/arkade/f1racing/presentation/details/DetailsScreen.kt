@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -11,6 +12,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,18 +35,21 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DetailsScreen(
     race: Race,
-    onBackClick: () -> Unit
-) {
-    // Find FP1 session
+    onBackClick: () -> Unit,
+    viewModel: DetailsViewModel,
+
+    ) {
+
     val fp1Session = race.sessions.find { it.sessionName == "FP1" }
-    
-    // Calculate countdown
+    val uiState by viewModel.uiState.collectAsState()
+
+
+
     var days by remember { mutableStateOf(0L) }
     var hours by remember { mutableStateOf(0L) }
     var minutes by remember { mutableStateOf(0L) }
@@ -53,10 +58,12 @@ fun DetailsScreen(
         while (true) {
             fp1Session?.startTime?.let { startTime ->
                 try {
-                    val targetTime = ZonedDateTime.parse(startTime, DateTimeFormatter.ISO_DATE_TIME)
+                    val targetTime = Instant.ofEpochSecond(startTime)
+                        .atZone(ZoneId.systemDefault())
                     val now = ZonedDateTime.now(ZoneId.systemDefault())
                     val duration = java.time.Duration.between(now, targetTime)
-                    
+
+
                     if (duration.isNegative) {
                         days = 0
                         hours = 0
@@ -82,11 +89,12 @@ fun DetailsScreen(
             delay(60000) // Update every minute
         }
     }
-    
-    // Format date range
+
     val dateRange = try {
-        val startDate = ZonedDateTime.parse(race.raceStartTime, DateTimeFormatter.ISO_DATE_TIME)
-        val endDate = ZonedDateTime.parse(race.raceEndTime, DateTimeFormatter.ISO_DATE_TIME)
+        val startDate = Instant.ofEpochSecond(race.raceStartTime)
+            .atZone(ZoneId.systemDefault())
+        val endDate = Instant.ofEpochSecond(race.raceEndTime)
+            .atZone(ZoneId.systemDefault())
         val startDay = startDate.dayOfMonth
         val endDay = endDate.dayOfMonth
         val month = startDate.format(DateTimeFormatter.ofPattern("MMMM"))
@@ -124,18 +132,38 @@ fun DetailsScreen(
                 .verticalScroll(scrollState)
                 .padding(top = 20.dp, start = 24.dp, end = 24.dp, bottom = 24.dp)
         ) {
-            // "Upcoming race" header
-            Text(
-                text = stringResource(R.string.upcoming_race),
-                color = whiteColor,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold,
-                fontFamily = montserratFont,
+            // "Upcoming race" header with back button
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 40.dp),
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center
-            )
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Back icon
+                Image(
+                    painter = painterResource(id = R.drawable.ic_back),
+                    contentDescription = "Back",
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clickable { onBackClick() },
+                    contentScale = ContentScale.Fit
+                )
+                
+                // "Upcoming race" text - centered
+                Text(
+                    text = stringResource(R.string.upcoming_race),
+                    color = whiteColor,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    fontFamily = montserratFont,
+                    modifier = Modifier.weight(1f),
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                )
+                
+                // Spacer to balance the back icon on the left
+                Spacer(modifier = Modifier.size(24.dp))
+            }
             
             // Race info and track row
             Row(
@@ -168,7 +196,7 @@ fun DetailsScreen(
                     
                     // Locality (green)
                     Text(
-                        text = race.locality,
+                        text = race.circuitId,
                         color = greenAccent,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.SemiBold,
@@ -204,7 +232,7 @@ fun DetailsScreen(
                 verticalArrangement = Arrangement.spacedBy(0.dp)
             ) {
                 Text(
-                    text = "FP1 Starts in",
+                    text = uiState.nextSession?.sessionName ?: "FP1",
                     color = whiteColor,
                     fontSize = 10.sp,
                     fontWeight = FontWeight.Medium, //todo: chnge
@@ -289,7 +317,7 @@ fun DetailsScreen(
             ) {
 
                 Text(
-                    text = "${race.circuitName} Circuit",
+                    text = "${race.circuitId} Circuit",
                     color = whiteColor,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
@@ -298,7 +326,7 @@ fun DetailsScreen(
                 
 
                 Text(
-                    text = "${race.circuitName} is located in ${race.locality}, ${race.country} and it was designed by German architect Hermann Tilke. It was built on the site of a former camel farm, in ${race.locality}. It measures 5.412 km, has 15 corners and 3 DRS Zones. The Grand Prix have 57 laps. This circuit has 6 alternative layouts.",
+                    text = "${race.raceName} is located in ${race.circuitId}, ${race.country} and it was designed by German architect Hermann Tilke. It was built on the site of a former camel farm, in ${race.locality}. It measures 5.412 km, has 15 corners and 3 DRS Zones. The Grand Prix have 57 laps. This circuit has 6 alternative layouts.",
                     color = whiteColor,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium,

@@ -23,7 +23,9 @@ data class HomeUiState(
     val topDriver: Driver? = null,
     val upcomingRace: Race? = null,
     val nextSession: Session? = null,
-    val nextSessionLocalTime: String? = null,
+    val nextSessionDate: String? = null,
+    val nextSessionTime: String? = null,
+    val nextSessionAmPm: String? = null,
     val error: String? = null
 )
 
@@ -43,27 +45,37 @@ class HomeViewModel(private val repository: Repository) : ViewModel() {
             _uiState.update { it.copy(isLoading = true, error = null) }
 
             try {
-                // Fetch top driver
+
                 val driverResult = repository.getLeadingDriver()
                 val driver = driverResult.getOrNull()
 
-                // Fetch upcoming race
-//                val raceResult = repository.get()
-//                val race = raceResult.getOrNull()
+                val raceResult = repository.getUpcomingRace()
+                val race = raceResult.getOrNull()
 
-                // Find next session
-//                val (nextSession, localTime) = race?.let { findNextSession(it) } ?: (null to null)
-//
+                val (nextSession, sessionDate) = race?.let {
+                    repository.getNextSession(it).getOrNull()
+                } ?: (null to null)
+
+                // Get session time
+                val sessionTime = race?.let {
+                    repository.getNextSessionTime(it).getOrNull()
+                }
+
+
+                val sessionAmPm = race?.let {
+                    repository.getSessionAmPm(it).getOrNull()
+                }
                 _uiState.update {
                     it.copy(
                         isLoading = false,
                         topDriver = driver,
-                        // upcomingRace = race,
-                        // nextSession = nextSession,
-                        // nextSessionLocalTime = localTime
+                        upcomingRace = race,
+                        nextSession = nextSession,
+                        nextSessionDate = sessionDate,
+                        nextSessionTime = sessionTime,
+                        nextSessionAmPm = sessionAmPm
                     )
                 }
-//                }
             } catch (e: Exception) {
                 _uiState.update {
                     it.copy(
@@ -75,45 +87,4 @@ class HomeViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun findNextSession(race: Race): Pair<Session?, String?> {
-        val now = Instant.now()
-        val nextSession = race.sessions
-            .filter {
-                try {
-                    val sessionEnd = ZonedDateTime.parse(
-                        it.endTime,
-                        DateTimeFormatter.ISO_DATE_TIME
-                    ).toInstant()
-                    sessionEnd.isAfter(now)
-                } catch (e: Exception) {
-                    false
-                }
-            }
-            .minByOrNull {
-                try {
-                    ZonedDateTime.parse(
-                        it.startTime,
-                        DateTimeFormatter.ISO_DATE_TIME
-                    ).toInstant()
-                } catch (e: Exception) {
-                    Instant.MAX
-                }
-            }
-
-        val localTime = nextSession?.let {
-            try {
-                val zonedDateTime = ZonedDateTime.parse(
-                    it.startTime,
-                    DateTimeFormatter.ISO_DATE_TIME
-                )
-                val localZonedDateTime = zonedDateTime.withZoneSameInstant(ZoneId.systemDefault())
-                localZonedDateTime.format(DateTimeFormatter.ofPattern("MMM dd, HH:mm"))
-            } catch (e: Exception) {
-                null
-            }
-        }
-
-        return nextSession to localTime
-    }
 }

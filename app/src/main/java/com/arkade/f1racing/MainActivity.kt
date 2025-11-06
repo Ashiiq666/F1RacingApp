@@ -21,6 +21,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.arkade.f1racing.data.network.ApiService
 import com.arkade.f1racing.data.repository.Repository
+import com.arkade.f1racing.presentation.details.DetailsViewModel
 import com.arkade.f1racing.presentation.home.HomeViewModel
 import com.arkade.f1racing.presentation.navigations.BottomNavigationBar
 import com.arkade.f1racing.presentation.navigations.Navigation
@@ -32,6 +33,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var apiService: ApiService
     private lateinit var repository: Repository
     private lateinit var homeViewModel: HomeViewModel
+    private lateinit var detailsViewModel: DetailsViewModel
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +42,7 @@ class MainActivity : ComponentActivity() {
         apiService = ApiService()
         repository = Repository(apiService)
         homeViewModel = HomeViewModel(repository)
+        detailsViewModel = DetailsViewModel(repository)
 
         main()
         // Set status bar to transparent for edge-to-edge, with white icons
@@ -57,13 +60,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             F1RacingAppTheme {
                 val systemUiController = rememberSystemUiController()
-                
+
                 // Set status bar to transparent for edge-to-edge, with white icons
                 // The black background will show through
                 SideEffect {
                     systemUiController.setStatusBarColor(
-                        color = Color.Transparent,
-                        darkIcons = false // false = white icons
+                        color = Color.Transparent, darkIcons = false // false = white icons
                     )
                 }
 
@@ -79,8 +81,7 @@ class MainActivity : ComponentActivity() {
                     bottomBar = {
                         if (showBottomBar) {
                             BottomNavigationBar(
-                                selectedRoute = currentRoute,
-                                onItemSelected = { route ->
+                                selectedRoute = currentRoute, onItemSelected = { route ->
                                     if (route != currentRoute) {
                                         navController.navigate(route) {
                                             // Pop up to the start destination to avoid building up a large stack
@@ -93,11 +94,9 @@ class MainActivity : ComponentActivity() {
                                             restoreState = true
                                         }
                                     }
-                                }
-                            )
+                                })
                         }
-                    }
-                ) { paddingValues ->
+                    }) { paddingValues ->
                     Surface(
                         modifier = Modifier
                             .fillMaxSize()
@@ -106,7 +105,8 @@ class MainActivity : ComponentActivity() {
                     ) {
                         Navigation(
                             navController = navController,
-                            homeViewModel = homeViewModel
+                            homeViewModel = homeViewModel,
+                            detailsViewModel = detailsViewModel
                         )
                     }
                 }
@@ -119,31 +119,25 @@ class MainActivity : ComponentActivity() {
         val repository = Repository(apiService)
 
         // Get the leading driver (position = 1)
-        repository.getLeadingDriver().fold(
-            onSuccess = { driver ->
-                driver?.let {
-                    println("Leading Driver: ${it.firstName} ${it.lastName}")
-                    println("Team: ${it.teamName}")
-                    println("Points: ${it.points}")
-                    println("Wins: ${it.wins}")
-                } ?: println("No leading driver found")
-            },
-            onFailure = { error ->
-                println("Error: ${error.message}")
-            }
-        )
+        repository.getLeadingDriver().fold(onSuccess = { driver ->
+            driver?.let {
+                println("Leading Driver: ${it.firstName} ${it.lastName}")
+                println("Team: ${it.teamName}")
+                println("Points: ${it.points}")
+                println("Wins: ${it.wins}")
+            } ?: println("No leading driver found")
+        }, onFailure = { error ->
+            println("Error: ${error.message}")
+        })
 
         // Get all drivers
-        repository.getAllDrivers().fold(
-            onSuccess = { drivers ->
-                drivers.forEach { driver ->
-                    println("${driver.position}. ${driver.firstName} ${driver.lastName} - ${driver.points} pts")
-                }
-            },
-            onFailure = { error ->
-                println("Error: ${error.message}")
+        repository.getAllDrivers().fold(onSuccess = { drivers ->
+            drivers.forEach { driver ->
+                println("${driver.position}. ${driver.firstName} ${driver.lastName} - ${driver.points} pts")
             }
-        )
+        }, onFailure = { error ->
+            println("Error: ${error.message}")
+        })
 
         repository.cleanup()
     }

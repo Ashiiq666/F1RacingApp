@@ -181,7 +181,7 @@ fun HomeScreen(
                             .fillMaxSize()
                             .padding(horizontal = 8.dp, vertical = 12.dp)
                     ) {
-                        // Route icon at top left
+
                         Image(
                             painter = painterResource(R.drawable.ic_circuit),
                             contentDescription = "Route icon",
@@ -199,7 +199,7 @@ fun HomeScreen(
                                 verticalArrangement = Arrangement.Center
                             ) {
                                 Text(
-                                    text = "FP1",
+                                    text = uiState.nextSession?.sessionName ?: "FP1",
                                     color = Color.White,
                                     fontSize = 12.sp,
                                     fontWeight = FontWeight.Bold,
@@ -216,7 +216,7 @@ fun HomeScreen(
                                         modifier = Modifier.size(16.dp)
                                     )
                                     Text(
-                                        text = "04 Friday",
+                                        text = uiState.nextSessionDate ?: "Tomorrow",
                                         color = Color.White,
                                         fontSize = 14.sp,
                                         fontWeight = FontWeight.Bold,
@@ -235,7 +235,7 @@ fun HomeScreen(
                                                 color = Color(0xFF02BB81)
                                             ).toSpanStyle()
                                         ) {
-                                            append("8.00")
+                                            append(uiState.nextSessionTime)
                                         }
                                         withStyle(
                                             style = boldTextStyle.copy(
@@ -245,7 +245,7 @@ fun HomeScreen(
                                                 fontWeight = FontWeight.Bold
                                             ).toSpanStyle()
                                         ) {
-                                            append("AM")
+                                            append(uiState.nextSessionAmPm)
                                         }
                                     },
                                 )
@@ -347,7 +347,7 @@ fun HomeScreen(
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(  8.dp)
+                                .padding(8.dp)
                         ) {
                             Box(modifier = Modifier.fillMaxSize()) {
                                 Row(
