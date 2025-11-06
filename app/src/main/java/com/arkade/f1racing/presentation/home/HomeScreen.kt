@@ -85,11 +85,21 @@ fun HomeScreen(
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(horizontal = 8.dp, vertical = 1.dp)
+                            .padding(horizontal = 8.dp, vertical = 12.dp)
                     ) {
-                        Column(modifier = Modifier.padding(10.dp)) {
+                        // Route icon at top left
+                        Image(
+                            painter = painterResource(R.drawable.ic_route),
+                            contentDescription = "Route icon",
+                            modifier = Modifier
+                                .align(Alignment.TopEnd)
+                                .size(48.dp)
+                        )
+
+                        Column(modifier = Modifier.padding(horizontal = 5.dp)) {
                             Column(
-                                modifier = Modifier.fillMaxWidth(),
+                                modifier = Modifier.fillMaxWidth()
+                                    .padding(top = 20.dp),
                                 horizontalAlignment = Alignment.Start,
                                 verticalArrangement = Arrangement.Center
                             ) {
@@ -119,7 +129,6 @@ fun HomeScreen(
                                     )
                                 }
 
-                                Spacer(modifier = Modifier.height(6.dp))
 
                                 Text(
                                     text = buildAnnotatedString {
