@@ -171,7 +171,8 @@ fun HomeScreen(
                 Card(
                     modifier = Modifier
                         .weight(1f)
-                        .height(132.dp),
+                        .height(132.dp)
+                        .clickable { onRaceCardClick() },
                     shape = RoundedCornerShape(16.dp),
                     colors = CardDefaults.cardColors(containerColor = Color(0xFF044331))
                 ) {

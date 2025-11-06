@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">F1RacingApp</string>
+    <string name="upcoming_race">Upcoming race</string>
 </resources>

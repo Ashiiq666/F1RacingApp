@@ -60,14 +60,23 @@ fun Navigation(
 
         composable(Screen.RaceDetail.route) {
             val race = homeViewModel.uiState.collectAsState().value.upcomingRace
-            if (race != null) {
-                DetailsScreen(
-                    race = race,
-                    onBackClick = {
-                        navController.popBackStack()
-                    }
-                )
-            }
+            // Show DetailsScreen even if race is null (for now, until race data is loaded)
+            DetailsScreen(
+                race = race ?: com.arkade.f1racing.data.model.Race(
+                    round = "",
+                    raceName = "",
+                    circuitId = "",
+                    circuitName = "",
+                    locality = "",
+                    country = "",
+                    raceStartTime = "",
+                    raceEndTime = "",
+                    sessions = emptyList()
+                ),
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }

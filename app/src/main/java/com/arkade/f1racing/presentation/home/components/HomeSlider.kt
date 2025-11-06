@@ -3,13 +3,11 @@ package com.arkade.f1racing.presentation.home.components
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -225,14 +223,14 @@ private fun DriverInfoCard(
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
-                            Color.Black.copy(alpha = 0.93f), // Bottom - 90% opacity
-                            Color.Black.copy(alpha = 0.8f), // Middle
-                            Color.Black.copy(alpha = 0.4f), // Upper middle
-                            Color.Black.copy(alpha = 0.1f), // Upper middle
-                            Color.Transparent // Top - fully transparent
+                            Color.Black.copy(alpha = 0.93f),
+                            Color.Black.copy(alpha = 0.8f),
+                            Color.Black.copy(alpha = 0.4f),
+                            Color.Black.copy(alpha = 0.1f),
+                            Color.Transparent
                         ),
-                        startY = Float.POSITIVE_INFINITY, // Bottom
-                        endY = 0f // Top
+                        startY = Float.POSITIVE_INFINITY,
+                        endY = 0f
                     )
                 )
                 .blur(radius = 8.dp)
@@ -330,7 +328,7 @@ private fun DriverInfoCard(
                     )
                 )
 
-                // PTS text badge - aligned horizontally next to the number
+
                 Box(
                     modifier = Modifier
                         .padding(bottom = 16.dp)
