@@ -1,9 +1,14 @@
 package com.arkade.f1racing.presentation.navigations
 
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -12,6 +17,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.draw.clip
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -22,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.times
 import com.arkade.f1racing.R
 
 sealed class BottomNavItem(
@@ -80,6 +87,22 @@ fun BottomNavigationBar(
         BottomNavItem.Profile
     )
 
+    val selectedIndex = items.indexOfFirst { it.route == selectedRoute }
+
+    // Animate the selector position
+    val selectorOffset by animateFloatAsState(
+        targetValue = selectedIndex.toFloat(),
+        animationSpec = tween(durationMillis = 300),
+        label = "selector_offset"
+    )
+
+    // Animated width for the pill selector
+    val selectorWidth by animateDpAsState(
+        targetValue = 80.dp,
+        animationSpec = tween(durationMillis = 300),
+        label = "selector_width"
+    )
+
     NavigationBar(
         modifier = modifier.wrapContentSize(),
         containerColor = Color.Black,
@@ -89,32 +112,26 @@ fun BottomNavigationBar(
         items.forEachIndexed { index, item ->
             val isSelected = selectedRoute == item.route
 
-
-
-            // Animated width for the pill selector (minimum 70.dp when selected)
-            val selectorWidth by animateDpAsState(
-                targetValue = if (isSelected) 80.dp else 0.dp,
-                label = "selector_width"
-            )
-
             NavigationBarItem(
-                modifier= Modifier.padding(start = 5.dp, end = 5.dp),
+                modifier = Modifier.padding(start = 5.dp, end = 5.dp),
                 icon = {
                     Box(
-                        modifier = Modifier
-                            .height(48.dp)
-                            .then(
-                                if (isSelected && selectorWidth > 0.dp) {
-                                    Modifier
-                                        .width(selectorWidth)
-                                        .clip(RoundedCornerShape(300.dp))
-                                        .background(Color(0xFF212121).copy(alpha = 0.7f))
-                                } else {
-                                    Modifier.widthIn(min = 28.dp) // Ensure icon is always visible
-                                }
-                            ),
+                        modifier = Modifier.height(48.dp),
                         contentAlignment = Alignment.Center
                     ) {
+                        // Animated selector background
+                        if (isSelected) {
+                            Box(
+                                modifier = Modifier
+                                    .offset(x = (selectorOffset - index) * 72.dp)
+                                    .width(selectorWidth)
+                                    .height(48.dp)
+                                    .clip(RoundedCornerShape(300.dp))
+                                    .background(Color(0xFF212121).copy(alpha = 0.7f))
+                            )
+                        }
+
+                        // Icon
                         Icon(
                             painter = painterResource(
                                 id = if (isSelected) item.selectedIconRes else item.unselectedIconRes
