@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -15,19 +14,19 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.Image
 import com.arkade.f1racing.R
-import com.arkade.f1racing.ui.theme.extraBoldTextStyle
-import com.arkade.f1racing.ui.theme.mediumTextStyle
-import com.arkade.f1racing.ui.theme.montserratFont
+import com.arkade.f1racing.ui.theme.space_gro_teskFont
 import kotlinx.coroutines.delay
 
 @Composable
@@ -36,19 +35,16 @@ fun HomeSlider(
 ) {
     val sliderItems = listOf(
         HomeSliderItem(
-            imageRes = R.drawable.diamond,
-            title = "Formula 1\nRacing",
-            subtitle = "Stay updated with real-time race status,\nupdates, and more"
+            position = "01",
+            wins = "09",
+            points = "429",
+            driverName = "Lando"
         ),
         HomeSliderItem(
-            imageRes = R.drawable.diamond,
-            title = "Discover new\ncircuits",
-            subtitle = "Find amazing tracks and hidden gems\naround the world"
-        ),
-        HomeSliderItem(
-            imageRes = R.drawable.diamond,
-            title = "Race with\nconfidence",
-            subtitle = "Get the best insights and reliable\nracing experience"
+            position = "02",
+            wins = "08",
+            points = "398",
+            driverName = "Max"
         )
     )
 
@@ -93,60 +89,122 @@ fun HomeSlider(
 private fun HomeSliderCard(
     item: HomeSliderItem
 ) {
+    val orangeColor = Color(0xFFFF5A08)
+    val whiteColor = Color(0xFFFFFFFF)
+    
     Box(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(480.dp)
+            .background(orangeColor)
     ) {
+        // Background text "Lando" (semi-transparent, behind driver)
+        Text(
+            text = "Lando",
+            modifier = Modifier.padding(start = 27.dp, top = 18.dp),
+            color = Color(0xFFFFF2AF).copy(
+                alpha = 0.3f
+            ),
+            fontSize = 164.sp,
+            maxLines = 1
+        )
+        
+        // Driver image (drive.png) on the right
         Image(
+            painter = painterResource(R.drawable.driver),
+            contentDescription = "Driver with helmet",
             modifier = Modifier
-                .fillMaxWidth()
-                .height(420.dp),
-            painter = painterResource(item.imageRes),
-            contentDescription = item.title,
-            contentScale = ContentScale.Crop
+                .align(Alignment.CenterEnd)
+                .fillMaxHeight()
+                .width(300.dp),
+            contentScale = ContentScale.Fit
         )
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(420.dp)
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            Color.Black.copy(alpha = 0.2f),
-                            Color.Transparent,
-                            Color.Transparent
-                        ),
-                        startY = 0f,
-                        endY = 1200f
-                    )
-                )
-        )
-
+        
+        // Statistics section on the left
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 26.dp, top = 53.dp, end = 24.dp)
                 .align(Alignment.TopStart)
+                .padding(start = 26.dp, top = 53.dp)
         ) {
-            Text(
-                text = item.title,
-                style = extraBoldTextStyle.copy(
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White,
-                    fontFamily = montserratFont
+            // Position row
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.ic_position),
+                    contentDescription = "Position icon",
+                    modifier = Modifier.size(20.dp)
                 )
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            Text(
-                text = item.subtitle,
-                style = mediumTextStyle.copy(
-                    fontSize = 16.sp,
-                    color = Color.White.copy(alpha = 0.9f),
-                    lineHeight = 22.sp,
-                    fontFamily = montserratFont
+                Text(
+                    text = "${item.position} Pos",
+                    color = whiteColor,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium
                 )
-            )
+            }
+            
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            // Wins row
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.ic_win),
+                    contentDescription = "Wins icon",
+                    modifier = Modifier.size(20.dp)
+                )
+                Text(
+                    text = "${item.wins} Wins",
+                    color = whiteColor,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+            
+            Spacer(modifier = Modifier.height(24.dp))
+            
+            // Points number with gradient
+            Row(
+                verticalAlignment = Alignment.Bottom,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    text = item.points,
+                    style = TextStyle(
+                        fontSize = 72.sp,
+                        fontFamily = space_gro_teskFont,
+                        fontWeight = FontWeight.Light,
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                whiteColor, // Bottom - #FFFFFF
+                                orangeColor // Top - #FF5A08
+                            )
+                        )
+                    )
+                )
+                
+                // PTS badge
+                Box(
+                    modifier = Modifier
+                        .padding(bottom = 8.dp)
+                        .background(
+                            color = orangeColor,
+                            shape = RoundedCornerShape(4.dp)
+                        )
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                ) {
+                    Text(
+                        text = "PTS",
+                        color = whiteColor,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 0.5.sp
+                    )
+                }
+            }
         }
     }
 }
