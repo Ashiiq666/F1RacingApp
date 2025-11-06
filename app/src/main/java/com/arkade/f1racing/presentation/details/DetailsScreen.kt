@@ -12,6 +12,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,6 +31,8 @@ import com.arkade.f1racing.R
 import com.arkade.f1racing.data.model.Race
 import com.arkade.f1racing.ui.theme.montserratFont
 import com.arkade.f1racing.ui.theme.space_gro_teskFont
+import com.arkade.f1racing.utils.KotlinExtension
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.delay
 import java.time.Instant
 import java.time.ZoneId
@@ -44,25 +47,34 @@ fun DetailsScreen(
     viewModel: DetailsViewModel,
 
     ) {
-
+    val systemUiController = rememberSystemUiController()
     val fp1Session = race.sessions.find { it.sessionName == "FP1" }
     val uiState by viewModel.uiState.collectAsState()
 
+    // Set navigation bar color to black
+    SideEffect {
+        systemUiController.setNavigationBarColor(
+            color = Color.Black,
+            darkIcons = false // false = white icons
+        )
+    }
 
+    LaunchedEffect(race) {
+        viewModel.setRaceAndCalculateNextSession(race)
+    }
 
     var days by remember { mutableStateOf(0L) }
     var hours by remember { mutableStateOf(0L) }
     var minutes by remember { mutableStateOf(0L) }
     
-    LaunchedEffect(fp1Session?.startTime) {
+    LaunchedEffect(uiState.nextSession?.startTime) {
         while (true) {
-            fp1Session?.startTime?.let { startTime ->
+            uiState.nextSession?.startTime?.let { startTime ->
                 try {
                     val targetTime = Instant.ofEpochSecond(startTime)
                         .atZone(ZoneId.systemDefault())
                     val now = ZonedDateTime.now(ZoneId.systemDefault())
                     val duration = java.time.Duration.between(now, targetTime)
-
 
                     if (duration.isNegative) {
                         days = 0
@@ -81,12 +93,37 @@ fun DetailsScreen(
                     minutes = 0
                 }
             } ?: run {
-                // No FP1 session found
-                days = 0
-                hours = 0
-                minutes = 0
+                fp1Session?.startTime?.let { startTime ->
+                    try {
+                        val targetTime = Instant.ofEpochSecond(startTime)
+                            .atZone(ZoneId.systemDefault())
+                        val now = ZonedDateTime.now(ZoneId.systemDefault())
+                        val duration = java.time.Duration.between(now, targetTime)
+
+                        if (duration.isNegative) {
+                            days = 0
+                            hours = 0
+                            minutes = 0
+                        } else {
+                            days = duration.toDays()
+                            val hoursRemaining = duration.minusDays(days)
+                            hours = hoursRemaining.toHours()
+                            val minutesRemaining = hoursRemaining.minusHours(hours)
+                            minutes = minutesRemaining.toMinutes()
+                        }
+                    } catch (e: Exception) {
+                        days = 0
+                        hours = 0
+                        minutes = 0
+                    }
+                } ?: run {
+                    // No session found at all
+                    days = 0
+                    hours = 0
+                    minutes = 0
+                }
             }
-            delay(60000) // Update every minute
+            delay(60000)
         }
     }
 
@@ -123,7 +160,6 @@ fun DetailsScreen(
             contentScale = ContentScale.Crop
         )
         
-        // Content overlay - Scrollable layout
         val scrollState = rememberScrollState()
         Column(
             modifier = Modifier
@@ -132,7 +168,6 @@ fun DetailsScreen(
                 .verticalScroll(scrollState)
                 .padding(top = 20.dp, start = 24.dp, end = 24.dp, bottom = 24.dp)
         ) {
-            // "Upcoming race" header with back button
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -150,7 +185,6 @@ fun DetailsScreen(
                     contentScale = ContentScale.Fit
                 )
                 
-                // "Upcoming race" text - centered
                 Text(
                     text = stringResource(R.string.upcoming_race),
                     color = whiteColor,
@@ -165,13 +199,11 @@ fun DetailsScreen(
                 Spacer(modifier = Modifier.size(24.dp))
             }
             
-            // Race info and track row
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Left side - Race information
                 Column(
                     modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -185,7 +217,6 @@ fun DetailsScreen(
                         fontFamily = montserratFont
                     )
                     
-                    // Race name
                     Text(
                         text = race.raceName,
                         color = whiteColor,
@@ -194,9 +225,8 @@ fun DetailsScreen(
                         fontFamily = montserratFont
                     )
                     
-                    // Locality (green)
                     Text(
-                        text = race.circuitId,
+                        text = KotlinExtension.formatCircuitId(race.circuitId),
                         color = greenAccent,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.SemiBold,
@@ -232,12 +262,13 @@ fun DetailsScreen(
                 verticalArrangement = Arrangement.spacedBy(0.dp)
             ) {
                 Text(
-                    text = uiState.nextSession?.sessionName ?: "FP1",
+                    text = "${uiState.nextSession?.sessionName ?: fp1Session?.sessionName ?: "FP1"} Starts in",
                     color = whiteColor,
                     fontSize = 10.sp,
                     fontWeight = FontWeight.Medium, //todo: chnge
                     fontFamily = montserratFont
                 )
+
                 
                 // Countdown timer
                 Row(
@@ -317,7 +348,7 @@ fun DetailsScreen(
             ) {
 
                 Text(
-                    text = "${race.circuitId} Circuit",
+                    text = "${KotlinExtension.formatCircuitId(race.circuitId)} Circuit",
                     color = whiteColor,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
@@ -326,7 +357,7 @@ fun DetailsScreen(
                 
 
                 Text(
-                    text = "${race.raceName} is located in ${race.circuitId}, ${race.country} and it was designed by German architect Hermann Tilke. It was built on the site of a former camel farm, in ${race.locality}. It measures 5.412 km, has 15 corners and 3 DRS Zones. The Grand Prix have 57 laps. This circuit has 6 alternative layouts.",
+                    text = "${race.raceName} is located in ${KotlinExtension.formatCircuitId(race.circuitId)}, ${race.country} and it was designed by German architect Hermann Tilke. It was built on the site of a former camel farm, in ${race.locality}. It measures 5.412 km, has 15 corners and 3 DRS Zones. The Grand Prix have 57 laps. This circuit has 6 alternative layouts.",
                     color = whiteColor,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium,

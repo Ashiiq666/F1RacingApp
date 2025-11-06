@@ -39,10 +39,15 @@ class DetailsViewModel(private val repository: Repository) : ViewModel() {
                 val raceResult = repository.getUpcomingRace()
                 val race = raceResult.getOrNull()
 
+                val (nextSession, _) = race?.let {
+                    repository.getNextSession(it).getOrNull()
+                } ?: (null to null)
+
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        race = race
+                        race = race,
+                        nextSession = nextSession
                     )
                 }
             } catch (e: Exception) {
@@ -50,6 +55,28 @@ class DetailsViewModel(private val repository: Repository) : ViewModel() {
                     it.copy(
                         isLoading = false,
                         error = e.message ?: "An error occurred"
+                    )
+                }
+            }
+        }
+    }
+
+    fun setRaceAndCalculateNextSession(race: Race) {
+        viewModelScope.launch {
+            try {
+                val (nextSession, _) = repository.getNextSession(race).getOrNull() ?: (null to null)
+                _uiState.update {
+                    it.copy(
+                        race = race,
+                        nextSession = nextSession,
+                        isLoading = false
+                    )
+                }
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(
+                        error = e.message ?: "An error occurred",
+                        isLoading = false
                     )
                 }
             }
