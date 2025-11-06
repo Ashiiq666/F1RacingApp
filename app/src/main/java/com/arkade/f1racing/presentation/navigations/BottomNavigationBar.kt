@@ -1,8 +1,8 @@
 package com.arkade.f1racing.presentation.navigations
 
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -71,22 +71,29 @@ fun BottomNavigationBar(
     )
 
     NavigationBar(
-        modifier = modifier.height(85.dp),
+        modifier = modifier.wrapContentSize(),
         containerColor = Color.Black,
         contentColor = Color.White,
         tonalElevation = 0.dp
     ) {
-        items.forEach { item ->
+        items.forEachIndexed { index, item ->
             val isSelected = selectedRoute == item.route
 
+            val itemModifier = when (index) {
+                0 -> Modifier.padding(start = 16.dp) // Start icon
+                items.lastIndex -> Modifier.padding(end = 16.dp) // End icon
+                else -> Modifier
+            }
+
             NavigationBarItem(
+                modifier = itemModifier,
                 icon = {
                     Icon(
                         painter = painterResource(
                             id = if (isSelected) item.selectedIconRes else item.unselectedIconRes
                         ),
                         contentDescription = item.label,
-                        modifier = Modifier.size(40.dp).padding(top = 8.dp, bottom = 8.dp)
+                        modifier = Modifier.size(28.dp)
                     )
                 },
                 selected = isSelected,
