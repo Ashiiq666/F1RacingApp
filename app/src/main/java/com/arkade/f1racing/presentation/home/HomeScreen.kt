@@ -1,8 +1,12 @@
 package com.arkade.f1racing.presentation.home
 
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -27,9 +32,13 @@ import com.arkade.f1racing.presentation.home.components.HomeSlider
 import com.arkade.f1racing.ui.theme.montserratFont
 import com.arkade.f1racing.ui.theme.space_gro_teskFont
 import androidx.compose.ui.text.withStyle
+import com.arkade.f1racing.BuildConfig
 import com.arkade.f1racing.ui.theme.boldTextStyle
+import com.arkade.f1racing.utils.Constants.GUIDE_URL
+import com.arkade.f1racing.utils.Constants.INSTRAGRAM_URL
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
+@SuppressLint("UseKtx")
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel,
@@ -238,10 +247,15 @@ fun HomeScreen(
                     }
 
                     // Card 3: Blue background with Formula 1 Education
+                    val context = LocalContext.current
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(60.dp),
+                            .height(60.dp)
+                            .clickable {
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(GUIDE_URL))
+                                context.startActivity(intent)
+                            },
                         shape = RoundedCornerShape(16.dp),
                         colors = CardDefaults.cardColors(containerColor = Color(0xFF3020FD))
                     ) {
@@ -306,11 +320,16 @@ fun HomeScreen(
 
 
             Spacer(modifier = Modifier.height(12.dp))
+            val context = LocalContext.current
 
             // Bottom: Card 4 - Image card
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .clickable {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(INSTRAGRAM_URL))
+                        context.startActivity(intent)
+                    }
                     .height(400.dp),
                 shape = RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.Black)
