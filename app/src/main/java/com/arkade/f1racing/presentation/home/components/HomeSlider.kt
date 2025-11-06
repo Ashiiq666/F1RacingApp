@@ -43,6 +43,7 @@ import com.arkade.f1racing.ui.theme.montserratFont
 import com.arkade.f1racing.ui.theme.space_gro_teskFont
 import com.arkade.f1racing.utils.M3CircularLoadingIndicator
 import com.arkade.f1racing.utils.M3ExpressiveCircularLoader
+import com.arkade.f1racing.utils.M3OrbitLoader
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.delay
@@ -60,10 +61,10 @@ fun HomeSlider(
                 .background(Color.Black),
             contentAlignment = Alignment.Center
         ) {
-            M3ExpressiveCircularLoader(
-                color = Color(0xFFFF5A08),
-                trackColor = Color.White.copy(alpha = 0.2f)
-            )
+             M3ExpressiveCircularLoader(
+                 color = Color(0xFFFF5A08),
+                 trackColor = Color.White.copy(alpha = 0.2f)
+             )
         }
         return
     }
