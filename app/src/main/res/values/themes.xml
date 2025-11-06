@@ -7,4 +7,12 @@
         <!-- Set status bar icons to light (white) -->
         <item name="android:windowLightStatusBar">false</item>
     </style>
+
+    <!-- Splash theme with logo background to avoid white screen flash -->
+    <style name="Theme.F1RacingApp.Splash" parent="Theme.F1RacingApp">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="android:statusBarColor">@android:color/black</item>
+        <item name="android:navigationBarColor">@android:color/black</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
 </resources>

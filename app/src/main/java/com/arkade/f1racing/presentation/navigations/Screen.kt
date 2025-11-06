@@ -8,6 +8,13 @@ sealed class Screen(
     val icon: Int? = null,
     val iconActive: Int? = null
 ) {
+    object Splash : Screen(
+        route = "splash",
+        title = null,
+        icon = null,
+        iconActive = null
+    )
+    
     object Home : Screen(
         route = "home",
         icon = R.drawable.ic_home_inactive,
