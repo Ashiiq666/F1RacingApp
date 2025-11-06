@@ -1,4 +1,44 @@
 <resources>
     <string name="app_name">F1RacingApp</string>
     <string name="upcoming_race">Upcoming race</string>
+    <string name="get_pro">Get Pro</string>
+    
+    <!-- Details Screen -->
+    <string name="round">Round %1$s</string>
+    <string name="starts_in">%1$s Starts in</string>
+    <string name="days">Days</string>
+    <string name="hours">Hours</string>
+    <string name="minutes">Minutes</string>
+    <string name="circuit">%1$s Circuit</string>
+    <string name="circuit_description">%1$s is located in %2$s, %3$s and it was designed by German architect Hermann Tilke. It was built on the site of a former camel farm, in %4$s. It measures 5.412 km, has 15 corners and 3 DRS Zones. The Grand Prix have 57 laps. This circuit has 6 alternative layouts.</string>
+    <string name="circuit_facts">Circuit Facts</string>
+    <string name="circuit_fact_1">His brother Arthur Leclerc is currently set to race for DAMS in the 2023 F2 Championship</string>
+    <string name="circuit_fact_2">He\'s not related to Édouard Leclerc, the founder of a French supermarket chain</string>
+    <string name="back">Back</string>
+    <string name="race_track">Race track</string>
+    <string name="details_background">Details background</string>
+    
+    <!-- Home Screen -->
+    <string name="error_loading_data">Error loading data</string>
+    <string name="retry">Retry</string>
+    <string name="formula_1">Formula 1</string>
+    <string name="education">Education</string>
+    <string name="follow_us">Follow Us</string>
+    <string name="pos">Pos</string>
+    <string name="wins">Wins</string>
+    <string name="pts">PTS</string>
+    <string name="unknown_error">Unknown error</string>
+    
+    <!-- Content Descriptions -->
+    <string name="diamond_icon">Diamond icon</string>
+    <string name="driver_with_helmet">Driver with helmet</string>
+    <string name="position_icon">Position icon</string>
+    <string name="wins_icon">Wins icon</string>
+    <string name="banner">Banner</string>
+    <string name="route_icon">Route icon</string>
+    <string name="calendar_icon">Calendar icon</string>
+    <string name="infinity_icon">Infinity icon</string>
+    <string name="arrow_icon">Arrow icon</string>
+    <string name="instagram_image">Instagram image</string>
+    <string name="app_logo">App Logo</string>
 </resources>

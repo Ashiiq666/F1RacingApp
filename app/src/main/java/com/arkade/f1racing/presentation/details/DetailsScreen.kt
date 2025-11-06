@@ -152,7 +152,7 @@ fun DetailsScreen(
         // Background image
         Image(
             painter = painterResource(id = R.drawable.details_bg),
-            contentDescription = "Details background",
+            contentDescription = stringResource(R.string.details_background),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(682.dp)
@@ -178,7 +178,7 @@ fun DetailsScreen(
                 // Back icon
                 Image(
                     painter = painterResource(id = R.drawable.ic_back),
-                    contentDescription = "Back",
+                    contentDescription = stringResource(R.string.back),
                     modifier = Modifier
                         .size(24.dp)
                         .clickable { onBackClick() },
@@ -210,7 +210,7 @@ fun DetailsScreen(
                 ) {
                     // Round
                     Text(
-                        text = "Round ${race.round}",
+                        text = stringResource(R.string.round, race.round),
                         color = whiteColor,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.SemiBold,
@@ -248,7 +248,7 @@ fun DetailsScreen(
                 // Right side - Track image
                 Image(
                     painter = painterResource(id = R.drawable.track),
-                    contentDescription = "Race track",
+                    contentDescription = stringResource(R.string.race_track),
                     modifier = Modifier
                         .size(220.dp)
                         .padding(top = 100.dp),
@@ -262,7 +262,10 @@ fun DetailsScreen(
                 verticalArrangement = Arrangement.spacedBy(0.dp)
             ) {
                 Text(
-                    text = "${uiState.nextSession?.sessionName ?: fp1Session?.sessionName ?: "FP1"} Starts in",
+                    text = stringResource(
+                        R.string.starts_in,
+                        uiState.nextSession?.sessionName ?: fp1Session?.sessionName ?: "FP1"
+                    ),
                     color = whiteColor,
                     fontSize = 10.sp,
                     fontWeight = FontWeight.Medium, //todo: chnge
@@ -287,7 +290,7 @@ fun DetailsScreen(
                             fontFamily = montserratFont
                         )
                         Text(
-                            text = "Days",
+                            text = stringResource(R.string.days),
                             color = whiteColor,
                             fontSize = 8.sp,
                             modifier = Modifier.padding(start = 4.dp),
@@ -308,7 +311,7 @@ fun DetailsScreen(
                             fontFamily = space_gro_teskFont
                         )
                         Text(
-                            text = "Hours",
+                            text = stringResource(R.string.hours),
                             color = whiteColor,
                             fontSize = 8.sp,
                             modifier = Modifier.padding(start = 4.dp),
@@ -329,7 +332,7 @@ fun DetailsScreen(
                             fontFamily = space_gro_teskFont
                         )
                         Text(
-                            text = "Minutes",
+                            text = stringResource(R.string.minutes),
                             color = whiteColor,
                             fontSize = 8.sp,
                             modifier = Modifier.padding(start = 4.dp),
@@ -348,7 +351,7 @@ fun DetailsScreen(
             ) {
 
                 Text(
-                    text = "${KotlinExtension.formatCircuitId(race.circuitId)} Circuit",
+                    text = stringResource(R.string.circuit, KotlinExtension.formatCircuitId(race.circuitId)),
                     color = whiteColor,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
@@ -357,7 +360,13 @@ fun DetailsScreen(
                 
 
                 Text(
-                    text = "${race.raceName} is located in ${KotlinExtension.formatCircuitId(race.circuitId)}, ${race.country} and it was designed by German architect Hermann Tilke. It was built on the site of a former camel farm, in ${race.locality}. It measures 5.412 km, has 15 corners and 3 DRS Zones. The Grand Prix have 57 laps. This circuit has 6 alternative layouts.",
+                    text = stringResource(
+                        R.string.circuit_description,
+                        race.raceName,
+                        KotlinExtension.formatCircuitId(race.circuitId),
+                        race.country ?: "",
+                        race.locality ?: ""
+                    ),
                     color = whiteColor,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium,
@@ -369,7 +378,7 @@ fun DetailsScreen(
                 
 
                 Text(
-                    text = "Circuit Facts",
+                    text = stringResource(R.string.circuit_facts),
                     color = whiteColor,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
@@ -378,7 +387,7 @@ fun DetailsScreen(
                 
 
                 Text(
-                    text = "His brother Arthur Leclerc is currently set to race for DAMS in the 2023 F2 Championship",
+                    text = stringResource(R.string.circuit_fact_1),
                     color = whiteColor,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium,
@@ -395,7 +404,7 @@ fun DetailsScreen(
                 
 
                 Text(
-                    text = "He's not related to Édouard Leclerc, the founder of a French supermarket chain",
+                    text = stringResource(R.string.circuit_fact_2),
                     color = whiteColor,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium,

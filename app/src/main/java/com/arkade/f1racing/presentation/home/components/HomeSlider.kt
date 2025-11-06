@@ -29,8 +29,10 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -39,6 +41,8 @@ import com.arkade.f1racing.R
 import com.arkade.f1racing.ui.theme.boldTextStyle
 import com.arkade.f1racing.ui.theme.montserratFont
 import com.arkade.f1racing.ui.theme.space_gro_teskFont
+import com.arkade.f1racing.utils.M3CircularLoadingIndicator
+import com.arkade.f1racing.utils.M3ExpressiveCircularLoader
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.delay
@@ -56,7 +60,10 @@ fun HomeSlider(
                 .background(Color.Black),
             contentAlignment = Alignment.Center
         ) {
-            CircularProgressIndicator(color = Color(0xFFFF5A08))
+            M3ExpressiveCircularLoader(
+                color = Color(0xFFFF5A08),
+                trackColor = Color.White.copy(alpha = 0.2f)
+            )
         }
         return
     }
@@ -105,11 +112,11 @@ fun HomeSlider(
                     ) {
                         Image(
                             painter = painterResource(R.drawable.diamond),
-                            contentDescription = "Diamond icon",
+                            contentDescription = stringResource(R.string.diamond_icon),
                             modifier = Modifier.size(18.dp)
                         )
                         Text(
-                            text = "Get Pro",
+                            text = stringResource(R.string.get_pro),
                             color = Color.White,
                             fontSize = 14.sp,
                             fontWeight = FontWeight.SemiBold,
@@ -210,7 +217,7 @@ private fun DriverInfoCard(
 
         Image(
             painter = painterResource(R.drawable.driver),
-            contentDescription = "Driver with helmet",
+            contentDescription = stringResource(R.string.driver_with_helmet),
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .width(320.dp),
@@ -257,7 +264,7 @@ private fun DriverInfoCard(
                 ) {
                     Image(
                         painter = painterResource(R.drawable.ic_position),
-                        contentDescription = "Position icon",
+                        contentDescription = stringResource(R.string.position_icon),
                         modifier = Modifier.size(16.dp)
                     )
                     Row(verticalAlignment = Alignment.Bottom) {
@@ -269,7 +276,7 @@ private fun DriverInfoCard(
                             fontWeight = FontWeight.Bold
                         )
                         Text(
-                            text = " Pos",
+                            text = " ${stringResource(R.string.pos)}",
                             color = whiteColor,
                             fontSize = 10.sp,
                             fontFamily = space_gro_teskFont,
@@ -285,7 +292,7 @@ private fun DriverInfoCard(
                 ) {
                     Image(
                         painter = painterResource(R.drawable.ic_win),
-                        contentDescription = "Wins icon",
+                        contentDescription = stringResource(R.string.wins_icon),
                         modifier = Modifier.size(16.dp)
                     )
                     Row(verticalAlignment = Alignment.Bottom) {
@@ -297,7 +304,7 @@ private fun DriverInfoCard(
                             fontWeight = FontWeight.Bold
                         )
                         Text(
-                            text = " Wins",
+                            text = " ${stringResource(R.string.wins)}",
                             color = whiteColor,
                             fontSize = 10.sp,
                             fontFamily = space_gro_teskFont,
@@ -339,7 +346,7 @@ private fun DriverInfoCard(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "PTS",
+                        text = stringResource(R.string.pts),
                         color = Color.White,
                         fontSize = 14.sp,
                         fontFamily = space_gro_teskFont,
@@ -366,7 +373,7 @@ private fun BannerCard(
     ) {
         Image(
             painter = painterResource(item.bannerRes),
-            contentDescription = "Banner",
+            contentDescription = stringResource(R.string.banner),
             modifier = Modifier
                 .width(271.dp)
                 .height(214.dp)
@@ -388,7 +395,7 @@ private fun BannerCard(
                     .padding(horizontal = 48.dp, vertical = 16.dp)
             ) {
                 Text(
-                    text = "Follow Us",
+                    text = stringResource(R.string.follow_us),
                     color = Color.Black,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,

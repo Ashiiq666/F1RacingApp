@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -102,19 +103,19 @@ fun HomeScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Text(
-                    text = "Error loading data",
+                    text = stringResource(R.string.error_loading_data),
                     color = Color.White,
                     fontSize = 18.sp,
                     fontFamily = montserratFont
                 )
                 Text(
-                    text = uiState.error ?: "Unknown error",
+                    text = uiState.error ?: stringResource(R.string.unknown_error),
                     color = Color.Gray,
                     fontSize = 14.sp,
                     fontFamily = montserratFont
                 )
                 Text(
-                    text = "Retry",
+                    text = stringResource(R.string.retry),
                     color = Color(0xFFFF5A08),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
@@ -194,7 +195,7 @@ fun HomeScreen(
 
                         Image(
                             painter = painterResource(R.drawable.ic_circuit),
-                            contentDescription = "Route icon",
+                            contentDescription = stringResource(R.string.route_icon),
                             modifier = Modifier
                                 .align(Alignment.TopEnd)
                                 .size(48.dp)
@@ -222,7 +223,7 @@ fun HomeScreen(
                                 ) {
                                     Image(
                                         painter = painterResource(R.drawable.calendar_check),
-                                        contentDescription = "Calendar icon",
+                                        contentDescription = stringResource(R.string.calendar_icon),
                                         modifier = Modifier.size(16.dp)
                                     )
                                     Text(
@@ -311,7 +312,7 @@ fun HomeScreen(
                             ) {
                                 Image(
                                     painter = painterResource(R.drawable.ic_route),
-                                    contentDescription = "Infinity icon",
+                                    contentDescription = stringResource(R.string.infinity_icon),
                                     modifier = Modifier.size(28.dp)
                                 )
                                 Text(
@@ -368,7 +369,7 @@ fun HomeScreen(
                                     // Two circle icons
                                     Image(
                                         painter = painterResource(R.drawable.ic_formula),
-                                        contentDescription = "Calendar icon",
+                                        contentDescription = stringResource(R.string.calendar_icon),
                                         modifier = Modifier.size(32.dp)
                                     )
 
@@ -378,7 +379,7 @@ fun HomeScreen(
                                         verticalArrangement = Arrangement.Center
                                     ) {
                                         Text(
-                                            text = "Formula 1",
+                                            text = stringResource(R.string.formula_1),
                                             style = boldTextStyle.copy(
                                                 fontSize = 12.sp, // Adjusted size
                                                 fontWeight = FontWeight.Bold,
@@ -387,7 +388,7 @@ fun HomeScreen(
                                             )
                                         )
                                         Text(
-                                            text = "Education",
+                                            text = stringResource(R.string.education),
                                             style = boldTextStyle.copy(
                                                 fontSize = 16.sp,
                                                 fontFamily = montserratFont,
@@ -399,7 +400,7 @@ fun HomeScreen(
 
                                 Image(
                                     painter = painterResource(R.drawable.ic_redirect),
-                                    contentDescription = "Arrow icon",
+                                    contentDescription = stringResource(R.string.arrow_icon),
                                     modifier = Modifier
                                         .align(Alignment.TopEnd)
                                         .size(16.dp),
@@ -431,7 +432,7 @@ fun HomeScreen(
                 Box {
                     Image(
                         painter = painterResource(R.drawable.instagram),
-                        contentDescription = "Instagram image",
+                        contentDescription = stringResource(R.string.instagram_image),
                         modifier = Modifier
                             .fillMaxSize(),
                         contentScale = ContentScale.Crop

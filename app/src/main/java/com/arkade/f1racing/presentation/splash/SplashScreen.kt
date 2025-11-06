@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.arkade.f1racing.R
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -50,7 +51,7 @@ fun SplashScreen(
     ) {
         Image(
             painter = painterResource(id = R.drawable.logo),
-            contentDescription = "App Logo",
+            contentDescription = stringResource(R.string.app_logo),
             modifier = Modifier.size(100.dp),
             contentScale = ContentScale.Fit
         )
