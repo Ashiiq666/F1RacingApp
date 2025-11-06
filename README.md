@@ -6,7 +6,6 @@ A modern Android application built with Jetpack Compose for Formula 1 racing ent
 
 <!-- Add your app screenshots here -->
 
-*Note: Please add screenshots of your app to the `screenshots/` directory and update this path.*
 
 ## ✨ Features
 
