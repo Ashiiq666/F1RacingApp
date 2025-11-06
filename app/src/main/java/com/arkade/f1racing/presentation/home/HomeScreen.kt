@@ -141,7 +141,6 @@ fun HomeScreen(
                 )
             }
 
-            // Add banner
             add(
                 HomeSliderItem.Banner(
                     bannerRes = R.drawable.banner
