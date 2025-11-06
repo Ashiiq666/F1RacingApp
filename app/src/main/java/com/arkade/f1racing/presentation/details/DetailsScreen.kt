@@ -192,7 +192,7 @@ fun DetailsScreen(
                     painter = painterResource(id = R.drawable.track),
                     contentDescription = "Race track",
                     modifier = Modifier
-                        .size(230.dp)
+                        .size(220.dp)
                         .padding(top = 100.dp),
                     contentScale = ContentScale.Fit
                 )
@@ -283,32 +283,32 @@ fun DetailsScreen(
             
             Spacer(modifier = Modifier.height(48.dp))
             
-            // Circuit Information Section
+
             Column(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                // Circuit Name Header
+
                 Text(
                     text = "${race.circuitName} Circuit",
                     color = whiteColor,
-                    fontSize = 24.sp,
+                    fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = montserratFont
                 )
                 
-                // Circuit Description
+
                 Text(
                     text = "${race.circuitName} is located in ${race.locality}, ${race.country} and it was designed by German architect Hermann Tilke. It was built on the site of a former camel farm, in ${race.locality}. It measures 5.412 km, has 15 corners and 3 DRS Zones. The Grand Prix have 57 laps. This circuit has 6 alternative layouts.",
                     color = whiteColor,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Normal,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium,
                     fontFamily = montserratFont,
                     lineHeight = 20.sp
                 )
                 
                 Spacer(modifier = Modifier.height(8.dp))
                 
-                // Circuit Facts Section Header
+
                 Text(
                     text = "Circuit Facts",
                     color = whiteColor,
@@ -317,29 +317,29 @@ fun DetailsScreen(
                     fontFamily = montserratFont
                 )
                 
-                // First Fact
+
                 Text(
                     text = "His brother Arthur Leclerc is currently set to race for DAMS in the 2023 F2 Championship",
                     color = whiteColor,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Normal,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium,
                     fontFamily = montserratFont,
                     lineHeight = 20.sp
                 )
                 
-                // Separator Line
+
                 Divider(
                     color = Color(0xFF333333),
                     thickness = 1.dp,
                     modifier = Modifier.padding(vertical = 12.dp)
                 )
                 
-                // Second Fact
+
                 Text(
                     text = "He's not related to Édouard Leclerc, the founder of a French supermarket chain",
                     color = whiteColor,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Normal,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium,
                     fontFamily = montserratFont,
                     lineHeight = 20.sp
                 )
